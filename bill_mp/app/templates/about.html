@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About | Smart Public Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/4e7d1f7fbd.js" crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 50px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .about-section {
+            background: #ffffff;
+            color: #333;
+            padding: 70px 20px;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #1e3c72;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .features {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-box {
+            background: #f4f7fb;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-box i {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #2a5298;
+        }
+
+        .feature-box h4 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1e3c72;
+            color: #fff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>About Smart Public Utility</h1>
+    <p>
+        Smart Public Utility Management System is a modern digital platform 
+        designed to streamline public utility services such as electricity, 
+        water, and gas billing through automation and secure web technologies.
+    </p>
+</section>
+
+<!-- About Content -->
+<section class="about-section">
+    <div class="container">
+
+        <div class="about-grid">
+
+            <div class="about-text">
+                <h2>Our Mission</h2>
+                <p>
+                    Our mission is to digitize public utility management, 
+                    reduce manual errors, and improve transparency between 
+                    administrators, staff, and consumers.
+                </p>
+                <p>
+                    The system enables automated billing, real-time tracking, 
+                    secure payments, and centralized data management to ensure 
+                    efficiency and reliability.
+                </p>
+            </div>
+
+            <div class="about-image">
+                        <img src="{% static 'images/utility_image.jpg' %}" alt="utility image"style="width:100%; border-radius:20px;">
+            </div>
+
+        </div>
+
+        <!-- Key Highlights -->
+        <div class="features">
+
+            <div class="feature-box">
+                <i class="fas fa-bolt"></i>
+                <h4>Automated Billing</h4>
+                <p>Generate accurate bills instantly based on meter readings.</p>
+            </div>
+
+            <div class="feature-box">
+                <i class="fas fa-credit-card"></i>
+                <h4>Online Payments</h4>
+                <p>Secure digital payment integration for fast transactions.</p>
+            </div>
+
+            <div class="feature-box">
+                <i class="fas fa-chart-line"></i>
+                <h4>Analytics Dashboard</h4>
+                <p>Monitor revenue, unpaid bills, and system performance.</p>
+            </div>
+
+            <div class="feature-box">
+                <i class="fas fa-user-shield"></i>
+                <h4>Secure Access</h4>
+                <p>Role-based authentication for Admin, Staff, and Consumers.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<div class="footer">
+    © 2026 Smart Public Utility Management System | All Rights Reserved
+</div>
+
+</body>
+</html>

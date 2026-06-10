@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Utility Bill Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #020617, #020617);
+    color: #e5e7eb;
+}
+
+/* NAVBAR */
+.navbar {
+    padding: 22px 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #60a5fa;
+}
+
+.navbar a {
+    color: #e5e7eb;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 500;
+}
+
+.navbar .btn {
+    background: linear-gradient(135deg, #60a5fa, #2563eb);
+    padding: 10px 26px;
+    border-radius: 40px;
+}
+
+/* HERO */
+.hero {
+    padding: 120px 90px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.hero h1 {
+    font-size: 56px;
+    line-height: 1.1;
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    color: #60a5fa;
+}
+
+.hero p {
+    font-size: 17px;
+    opacity: 0.85;
+    margin-bottom: 35px;
+}
+
+.hero .actions a {
+    display: inline-block;
+    margin-right: 15px;
+    padding: 14px 38px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.primary {
+    background: linear-gradient(135deg, #60a5fa, #2563eb);
+    color: #fff;
+}
+
+.secondary {
+    border: 2px solid #60a5fa;
+    color: #60a5fa;
+}
+
+/* FLOATING PANEL */
+.panel {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 0 80px rgba(96,165,250,0.25);
+}
+
+.panel h3 {
+    margin-bottom: 25px;
+}
+
+.panel ul {
+    list-style: none;
+}
+
+.panel li {
+    margin-bottom: 15px;
+    opacity: 0.85;
+}
+
+/* HIGHLIGHTS */
+.highlights {
+    padding: 80px 90px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+}
+
+.highlight {
+    background: rgba(255,255,255,0.06);
+    padding: 35px;
+    border-radius: 25px;
+    transition: 0.4s;
+}
+
+.highlight:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 40px rgba(96,165,250,0.3);
+}
+
+.highlight h2 {
+    font-size: 38px;
+    color: #60a5fa;
+}
+
+/* TIMELINE */
+.timeline {
+    padding: 90px;
+}
+
+.timeline h2 {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 60px;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 35px;
+}
+
+.step {
+    background: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-left: 5px solid #60a5fa;
+    border-radius: 20px;
+}
+
+/* TRUST */
+.trust {
+    padding: 90px;
+    text-align: center;
+}
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.trust-card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+}
+
+/* CTA */
+.cta {
+    padding: 100px;
+    text-align: center;
+    background: linear-gradient(135deg, #2563eb, #020617);
+}
+
+.cta h2 {
+    font-size: 42px;
+    margin-bottom: 25px;
+}
+
+.cta a {
+    padding: 16px 45px;
+    background: #fff;
+    color: #020617;
+    border-radius: 40px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 25px;
+    opacity: 0.6;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 30px;
+    }
+    .navbar, .highlights, .timeline, .trust, .cta {
+        padding: 60px 30px;
+    }
+    .hero h1 {
+        font-size: 40px;
+    }
+}
+</style>
+
+<body>
+
+<!-- NAV -->
+<div class="navbar">
+    <div class="logo">SmartUtility</div>
+    <div>
+        <a href="{% url 'features_view' %}">Features</a>
+        <a href="{% url 'about_view' %}">About</a>
+        <a href="{% url 'admin_login' %}">Admin</a>
+
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Smart <span>Utility</span><br>Management Platform</h1>
+        <p>
+            A premium digital solution for managing electricity, water, and gas billing
+            with unmatched accuracy, transparency, and security.
+        </p>
+
+        <div class="actions">
+            <a href="{% url 'register' %}" class="primary">Get Started</a>
+            
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Why SmartUtility?</h3>
+        <ul>
+            <li>✔ AI-assisted billing accuracy</li>
+            <li>✔ Smart meter automation</li>
+            <li>✔ Encrypted digital payments</li>
+            <li>✔ Real-time usage insights</li>
+            <li>✔ Government-ready compliance</li>
+        </ul>
+    </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights">
+    <div class="highlight">
+        <h2>99.9%</h2>
+        <p>Billing Accuracy</p>
+    </div>
+    <div class="highlight">
+        <h2>24/7</h2>
+        <p>Service Availability</p>
+    </div>
+    <div class="highlight">
+        <h2>100K+</h2>
+        <p>Consumers Served</p>
+    </div>
+    <div class="highlight">
+        <h2>Secure</h2>
+        <p>Digital Transactions</p>
+    </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline">
+    <h2>Smart Billing Workflow</h2>
+
+    <div class="timeline-grid">
+        <div class="step">Smart meters record usage automatically</div>
+        <div class="step">System calculates bill using tariff rules</div>
+        <div class="step">Customer receives instant notification</div>
+        <div class="step">Secure online payment is processed</div>
+    </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+    <h2>Trusted for Smart Cities</h2>
+    <p>Built to support future-ready public utility infrastructure</p>
+
+    <div class="trust-grid">
+        <div class="trust-card">Government Ready</div>
+        <div class="trust-card">ISO Compliant</div>
+        <div class="trust-card">Cloud Scalable</div>
+        <div class="trust-card">Cyber Secure</div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <h2>Upgrade to Smart Utility Management</h2>
+    <a href="{% url 'register' %}">Create Account</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    © 2026 Smart Utility Bill Management System
+</footer>
+
+</body>
+</html>

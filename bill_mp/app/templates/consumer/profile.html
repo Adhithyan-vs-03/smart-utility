@@ -1,0 +1,585 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Profile | Smart Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: rgba(67, 97, 238, 0.1);
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            color: #f1c40f;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* MAIN CONTAINER */
+        .profile-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* HEADER */
+        .profile-header {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .profile-header h1 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .edit-profile-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .edit-profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(67, 97, 238, 0.4);
+            color: white;
+        }
+
+        /* PROFILE CARD */
+        .profile-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            height: 100%;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+            background: var(--primary-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* DETAILS STYLING */
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+
+        .detail-value.address {
+            font-weight: 400;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* UTILITY BADGES */
+        .utility-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0.25rem;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .utility-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .utility-badge.electricity {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+        }
+
+        .utility-badge.water {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .utility-badge.gas {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* METER TABLE */
+        .meter-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .meter-table th {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .meter-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .meter-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .meter-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        /* ACTION BUTTONS */
+        .action-btn {
+            width: 100%;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .action-btn.secondary {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+            color: var(--text-primary);
+            border-color: #cbd5e1;
+        }
+
+        /* EMPTY STATES */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .profile-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+                padding: 1.5rem;
+            }
+            
+            .profile-card {
+                padding: 1.5rem;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .detail-value {
+                text-align: left;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'customer_dashboard' %}">
+            <i class="fas fa-bolt"></i>
+            Smart Utility
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fas fa-bars text-white"></i>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer_dashboard' %}">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-user-circle"></i>
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer_login' %}">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<main class="profile-container">
+    <!-- HEADER -->
+    <div class="profile-header">
+        <div>
+            <h1>My Profile</h1>
+            <p class="profile-subtitle">Manage your personal information and utility connections</p>
+        </div>
+        <a href="{% url 'edit_profile' %}" class="edit-profile-btn">
+            <i class="fas fa-edit"></i>
+            Edit Profile
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- LEFT COLUMN: PERSONAL DETAILS -->
+        <div class="col-lg-4">
+            <div class="profile-card">
+                <h3 class="section-title">
+                    <i class="fas fa-user"></i>
+                    Personal Details
+                </h3>
+                
+                <div class="details-list">
+                    <div class="detail-item">
+                        <span class="detail-label">Name</span>
+                        <span class="detail-value">{{ user.get_full_name|default:user.username }}</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value">{{ user.email }}</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Phone</span>
+                        <span class="detail-value">{{ user.phone|default:"Not provided" }}</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Customer ID</span>
+                        <span class="detail-value" style="font-family: monospace;">{{ customer.customer_id }}</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Address</span>
+                        <span class="detail-value address">{{ customer.address|default:"No address provided" }}</span>
+                    </div>
+                </div>
+                
+                <hr style="margin: 1.5rem 0; border-color: var(--border-color);">
+                
+                <a href="{% url 'password_change' %}" class="action-btn secondary">
+                    <i class="fas fa-key"></i>
+                    Update Password
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: UTILITIES & METER -->
+        <div class="col-lg-8">
+            <!-- UTILITY CONNECTIONS -->
+            <div class="profile-card mb-4">
+                <h3 class="section-title">
+                    <i class="fas fa-plug"></i>
+                    Utility Connections
+                </h3>
+                
+                <div class="utilities-container">
+                    {% if connections %}
+                        {% for conn in connections %}
+                            <span class="utility-badge {{ conn.connection_type|lower }}">
+                                <i class="fas fa-{% if conn.connection_type == 'Electricity' %}bolt{% elif conn.connection_type == 'Water' %}tint{% else %}fire{% endif %}"></i>
+                                {{ conn.connection_type }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-plug"></i>
+                            <h4 style="color: var(--text-light); font-weight: 600; margin-bottom: 0.5rem;">No Active Connections</h4>
+                            <p>You don't have any utility connections yet.</p>
+                            <a href="{% url 'add_connection' %}" class="btn btn-primary mt-3">
+                                <i class="fas fa-plus"></i>
+                                Add Connection
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- METER DETAILS -->
+            <div class="profile-card">
+                <h3 class="section-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Meter Details
+                </h3>
+                
+                {% if meter %}
+                    <div class="table-responsive">
+                        <table class="meter-table">
+                            <thead>
+                                <tr>
+                                    <th>Utility Type</th>
+                                    <th>Billing Month</th>
+                                    <th>Units Consumed</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="utility-badge {{ meter.utility_type|lower }}" style="font-size: 0.8rem; padding: 0.25rem 0.75rem;">
+                                            <i class="fas fa-{% if meter.utility_type == 'Electricity' %}bolt{% elif meter.utility_type == 'Water' %}tint{% else %}fire{% endif %}"></i>
+                                            {{ meter.utility_type }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong>{{ meter.month }}</strong>
+                                    </td>
+                                    <td>
+                                        <span style="font-family: monospace; font-weight: 700; color: var(--primary);">
+                                            {{ meter.units_consumed }}
+                                        </span>
+                                        <small style="color: var(--text-light);"> units</small>
+                                    </td>
+                                    <td>
+                                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                                            <i class="fas fa-clock"></i>
+                                            {{ meter.created_at|date:"M d, Y" }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 p-3" style="background: #f8fafc; border-radius: var(--radius-md);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 style="color: var(--text-primary); font-weight: 600;">Current Status</h6>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Meter is actively recording consumption</p>
+                            </div>
+                            <span style="color: var(--success); font-weight: 600;">
+                                <i class="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h4 style="color: var(--text-light); font-weight: 600; margin-bottom: 0.5rem;">Meter Reading Not Available</h4>
+                        <p>No meter data available at the moment.</p>
+                        <a href="" class="btn btn-outline-primary mt-3">
+                            <i class="fas fa-sync"></i>
+                            Refresh Data
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Add hover effects to utility badges
+    document.querySelectorAll('.utility-badge').forEach(badge => {
+        badge.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        badge.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Format dates if needed
+    document.addEventListener('DOMContentLoaded', function() {
+        // Format any date elements if necessary
+        const dateElements = document.querySelectorAll('.detail-value.address');
+        dateElements.forEach(el => {
+            if(el.textContent.includes('202')) {
+                // Simple date formatting could be added here
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications & Alerts Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fc;
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg,#0d6efd,#084298);
+            color: white;
+            font-weight: 600;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🔔 Notifications & Alerts Management</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Bill Reminders -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Bill Reminders
+            </div>
+            <div class="card-body">
+                <label>Send Reminder Before Due Date (Days)</label>
+                <input type="number" name="bill_reminder_days" class="form-control" placeholder="Enter days before due date">
+            </div>
+        </div>
+
+        <!-- Payment Alerts -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Payment Due Alerts
+            </div>
+            <div class="card-body">
+                <label>Enable Payment Due Alerts</label>
+                <select name="payment_due_alert" class="form-select">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Overdue Notifications -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Overdue Notifications
+            </div>
+            <div class="card-body">
+                <label>Enable Overdue Notifications</label>
+                <select name="overdue_notification" class="form-select">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- System Announcements -->
+        <div class="card mb-4">
+            <div class="card-header">
+                System Announcements
+            </div>
+            <div class="card-body">
+                <label>Announcement Message</label>
+                <textarea name="system_announcement" rows="3" class="form-control" placeholder="Enter system-wide announcement"></textarea>
+            </div>
+        </div>
+
+        <!-- Maintenance Alerts -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Maintenance Alerts
+            </div>
+            <div class="card-body">
+                <label>Maintenance Message</label>
+                <textarea name="maintenance_alert" rows="3" class="form-control" placeholder="Enter maintenance alert message"></textarea>
+            </div>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">
+                Save Settings
+            </button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

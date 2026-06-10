@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility staff · dashboard (electricity / water / gas)</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: #f3f6fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .dashboard {
+            max-width: 1280px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -10px rgba(0,20,50,0.12);
+            padding: 2rem 2rem 2.5rem;
+        }
+        /* header / role bar */
+        .role-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #0a2e4a;
+        }
+        .app-title i {
+            color: #2563eb;
+            font-size: 1.8rem;
+        }
+        .login-panel {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #f0f4fa;
+            padding: 0.6rem 1.2rem;
+            border-radius: 48px;
+            align-items: center;
+        }
+        .role-badge {
+            background: white;
+            border-radius: 32px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e3a5f;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .role-badge i {
+            color: #3b82f6;
+        }
+        .btn {
+            border: none;
+            background: white;
+            padding: 0.45rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid transparent;
+        }
+        .btn-login {
+            background: #1e3a5f;
+            color: white;
+            border: none;
+        }
+        .btn-login i {
+            color: white;
+        }
+        .btn-login:hover {
+            background: #14304e;
+        }
+        .btn-outline {
+            border: 1px solid #ccdbe9;
+            background: white;
+        }
+        .btn-outline:hover {
+            background: #eef4ff;
+        }
+        .btn-sm {
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+        }
+        .utility-tabs {
+            display: flex;
+            gap: 6px;
+            background: #edf2f7;
+            padding: 6px;
+            border-radius: 40px;
+            margin-bottom: 28px;
+            width: fit-content;
+        }
+        .tab {
+            padding: 0.6rem 1.8rem;
+            border-radius: 32px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: transparent;
+            color: #4a5c6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;  /* dynamic disable / enable via JS */
+            transition: 0.1s;
+            border: none;
+        }
+        .tab.active {
+            background: white;
+            color: #0f2c41;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .tab i {
+            font-size: 1rem;
+        }
+        .tab.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: transparent;
+            box-shadow: none;
+            pointer-events: none;
+        }
+        /* admin summary cards */
+        .admin-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 32px;
+            background: #eaf0f5;
+            padding: 1.4rem 1.8rem;
+            border-radius: 28px;
+        }
+        .stat-card {
+            background: white;
+            padding: 0.8rem 1.6rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .stat-card i {
+            font-size: 1.3rem;
+            color: #2563eb;
+        }
+        /* staff panel: only active utility visible */
+        .utility-panel {
+            display: none;
+        }
+        .utility-panel.active-panel {
+            display: block;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0a2e4a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bill-table {
+            background: white;
+            border-radius: 24px;
+            border: 1px solid #e2edf2;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr 1fr 1.2fr 1.5fr;
+            background: #f8fcff;
+            padding: 0.9rem 1.5rem;
+            font-weight: 600;
+            color: #1f4662;
+            border-bottom: 1px solid #dae8ed;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr 1fr 1.2fr 1.5fr;
+            padding: 1rem 1.5rem;
+            align-items: center;
+            border-bottom: 1px solid #ecf3f7;
+            background: white;
+        }
+        .table-row:last-child {
+            border-bottom: none;
+        }
+        .consumer-name {
+            font-weight: 600;
+            color: #153e5a;
+        }
+        .badge-status {
+            background: #fff3cd;
+            color: #856404;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            width: fit-content;
+            text-transform: capitalize;
+        }
+        .badge-paid {
+            background: #d4edda;
+            color: #0a5e2a;
+        }
+        .action-btn {
+            background: none;
+            border: 1px solid #b8d1dc;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e3b4f;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: 0.1s;
+            background: white;
+        }
+        .action-btn:hover {
+            background: #e3f0f5;
+            border-color: #6b9eb3;
+        }
+        .action-btn i {
+            font-size: 0.7rem;
+        }
+        .update-consumption {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .consumption-input {
+            width: 80px;
+            padding: 0.3rem 0.5rem;
+            border-radius: 30px;
+            border: 1px solid #cbdde4;
+            font-size: 0.8rem;
+            background: white;
+        }
+        .bill-calculation {
+            background: #f4f9fd;
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .calc-meta {
+            font-weight: 500;
+            color: #1a465b;
+        }
+        .btn-calc {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hidden {
+            display: none;
+        }
+        .admin-only {
+            background: #fdf6e3;
+            border-left: 6px solid #f4b942;
+            border-radius: 18px;
+            padding: 1.2rem 2rem;
+        }
+        .footnote {
+            margin-top: 30px;
+            color: #4a6a7c;
+            font-size: 0.8rem;
+            text-align: center;
+            border-top: 1px solid #d0e0e7;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+
+    <!-- ========== HEADER: role login simulation ========= -->
+    <div class="role-header">
+        <div class="app-title">
+            <i class="fas fa-bolt"></i> 
+            <span>UtilityStaff · role dash</span>
+        </div>
+        <div class="login-panel">
+            <span class="role-badge" id="currentRoleBadge">
+                <i class="fas fa-user-shield"></i> <span id="activeRoleLabel">Not logged in</span>
+            </span>
+            <!-- role switching – staff & admin -->
+            <button class="btn btn-login" data-role="electricity"><i class="fas fa-bolt"></i> Electricity staff</button>
+            <button class="btn btn-login" data-role="water"><i class="fas fa-water"></i> Water staff</button>
+            <button class="btn btn-login" data-role="gas"><i class="fas fa-fire"></i> Gas staff</button>
+            <button class="btn btn-outline" data-role="admin"><i class="fas fa-crown"></i> Admin</button>
+        </div>
+    </div>
+
+    <!-- ========== UTILITY TABS – only enabled for admin ========= -->
+    <div class="utility-tabs" id="tabContainer">
+        <div class="tab active" data-tab="electricity"><i class="fas fa-bolt"></i> Electricity</div>
+        <div class="tab" data-tab="water"><i class="fas fa-water"></i> Water</div>
+        <div class="tab" data-tab="gas"><i class="fas fa-fire"></i> Gas</div>
+    </div>
+
+    <!-- ========== ADMIN GLOBAL SUMMARY (visible only for admin) ========= -->
+    <div id="adminSummaryBlock" class="admin-summary hidden">
+        <div class="stat-card"><i class="fas fa-bolt"></i> Electr. due: $1,420</div>
+        <div class="stat-card"><i class="fas fa-water"></i> Water due: $830</div>
+        <div class="stat-card"><i class="fas fa-fire"></i> Gas due: $675</div>
+        <div class="stat-card"><i class="fas fa-users"></i> Total consumers: 9</div>
+    </div>
+
+    <!-- ========== DYNAMIC UTILITY PANELS ========= -->
+    <!-- ELECTRICITY PANEL (staff & admin view) -->
+    <div id="panel-electricity" class="utility-panel active-panel">
+        <div class="section-title"><i class="fas fa-bolt" style="color:#2563eb;"></i> Electricity utility · manage</div>
+        <div class="bill-table" id="elecTable">
+            <div class="table-header">
+                <span>Consumer</span><span>Meter ID</span><span>Consumption</span><span>Bill $</span><span>Status</span><span>Actions</span>
+            </div>
+            <!-- rows dynamically via JS, but static fallback works -->
+        </div>
+        <!-- consumption update / calculation area -->
+        <div class="bill-calculation">
+            <span class="calc-meta"><i class="fas fa-calculator"></i> Staff quick calc:  adjust consumption & bill</span>
+            <button class="btn-calc" id="electricityRecalcBtn"><i class="fas fa-sync-alt"></i> Recalculate all bills</button>
+        </div>
+    </div>
+
+    <!-- WATER PANEL (staff & admin) -->
+    <div id="panel-water" class="utility-panel">
+        <div class="section-title"><i class="fas fa-water" style="color:#0891b2;"></i> Water utility · manage</div>
+        <div class="bill-table" id="waterTable"><div class="table-header"><span>Consumer</span><span>Meter ID</span><span>Consumption</span><span>Bill $</span><span>Status</span><span>Actions</span></div></div>
+        <div class="bill-calculation"><span class="calc-meta"><i class="fas fa-calculator"></i> Water staff – update rates</span>
+            <button class="btn-calc" id="waterRecalcBtn"><i class="fas fa-sync-alt"></i> Recalculate bills</button>
+        </div>
+    </div>
+
+    <!-- GAS PANEL (staff & admin) -->
+    <div id="panel-gas" class="utility-panel">
+        <div class="section-title"><i class="fas fa-fire" style="color:#d97706;"></i> Gas utility · manage</div>
+        <div class="bill-table" id="gasTable"><div class="table-header"><span>Consumer</span><span>Meter ID</span><span>Consumption</span><span>Bill $</span><span>Status</span><span>Actions</span></div></div>
+        <div class="bill-calculation"><span class="calc-meta"><i class="fas fa-calculator"></i> Gas staff – consumption pricing</span>
+            <button class="btn-calc" id="gasRecalcBtn"><i class="fas fa-sync-alt"></i> Recalculate bills</button>
+        </div>
+    </div>
+
+    <!-- subtle role reminder -->
+    <div class="footnote" id="roleHint">
+        ⚡ Staff: only own utility visible & editable. Admin can access all tabs & see summary.
+    </div>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // ---------- MOCK DATASET: consumers per utility ----------
+        const utilityData = {
+            electricity: [
+                { id: 1, consumer: 'Brighton Heights', meter: 'EL-7821', consumption: 320, bill: 48.50, status: 'pending' },
+                { id: 2, consumer: 'Maple Ave 12', meter: 'EL-4510', consumption: 550, bill: 82.30, status: 'paid' },
+                { id: 3, consumer: 'Sunset Bldg', meter: 'EL-9033', consumption: 210, bill: 31.20, status: 'pending' }
+            ],
+            water: [
+                { id: 101, consumer: 'Pine Street 5', meter: 'WT-21A', consumption: 180, bill: 42.75, status: 'pending' },
+                { id: 102, consumer: 'Lakeview Apts', meter: 'WT-87D', consumption: 290, bill: 68.90, status: 'pending' },
+                { id: 103, consumer: 'Orchard Res', meter: 'WT-34F', consumption: 120, bill: 29.80, status: 'paid' }
+            ],
+            gas: [
+                { id: 201, consumer: 'Cedar Lodge', meter: 'GS-554', consumption: 75, bill: 63.20, status: 'pending' },
+                { id: 202, consumer: 'Elm Street 8', meter: 'GS-123', consumption: 140, bill: 112.40, status: 'paid' },
+                { id: 203, consumer: 'Harbor View', meter: 'GS-996', consumption: 60, bill: 48.60, status: 'pending' }
+            ]
+        };
+
+        // ---------- rate card for bill calculation (per unit) ----------
+        const rates = { electricity: 0.15, water: 0.24, gas: 0.82 };
+
+        // ---------- current role: null (not logged), staff_e, staff_w, staff_g, admin ----------
+        let currentRole = null;   // 'electricity', 'water', 'gas', 'admin'
+
+        // ---------- DOM elements ----------
+        const panels = {
+            electricity: document.getElementById('panel-electricity'),
+            water: document.getElementById('panel-water'),
+            gas: document.getElementById('panel-gas')
+        };
+        const tabs = document.querySelectorAll('.tab');
+        const adminSummary = document.getElementById('adminSummaryBlock');
+        const activeRoleLabel = document.getElementById('activeRoleLabel');
+        const roleHint = document.getElementById('roleHint');
+
+        // ---------- helper: render table for a utility ----------
+        function renderUtility(utility) {
+            const data = utilityData[utility];
+            const tableContainer = document.getElementById(`${utility}Table`);
+            if (!tableContainer) return;
+            // keep header + generate rows
+            const header = tableContainer.querySelector('.table-header')?.outerHTML || `<div class="table-header"><span>Consumer</span><span>Meter ID</span><span>Consumption</span><span>Bill $</span><span>Status</span><span>Actions</span></div>`;
+            let rowsHtml = '';
+            data.forEach(rec => {
+                const statusClass = rec.status === 'paid' ? 'badge-paid' : '';
+                rowsHtml += `<div class="table-row" data-consumer-id="${rec.id}" data-utility="${utility}">
+                    <span class="consumer-name">${rec.consumer}</span>
+                    <span style="font-family: monospace;">${rec.meter}</span>
+                    <span>
+                        <span class="consumption-value">${rec.consumption}</span> 
+                        <span style="font-size:0.7rem; color:#3a6c7f;">kWh/L/therm</span>
+                    </span>
+                    <span><span class="bill-value">$${rec.bill.toFixed(2)}</span></span>
+                    <span><span class="badge-status ${statusClass} status-badge">${rec.status}</span></span>
+                    <span class="update-consumption">
+                        <input type="number" class="consumption-input" placeholder="kWh" value="${rec.consumption}" min="0" step="1" style="width:70px;">
+                        <button class="action-btn update-bill-btn"><i class="fas fa-pen"></i> update</button>
+                        <button class="action-btn toggle-status-btn"><i class="fas fa-toggle-on"></i> status</button>
+                    </span>
+                </div>`;
+            });
+            tableContainer.innerHTML = header + rowsHtml;
+        }
+
+        // ---------- recalc all bills for utility (staff action) ----------
+        function recalcUtilityBills(utility) {
+            const data = utilityData[utility];
+            const rate = rates[utility];
+            data.forEach(rec => {
+                // bill = consumption * rate (simple)
+                rec.bill = parseFloat((rec.consumption * rate).toFixed(2));
+            });
+            renderUtility(utility);
+        }
+
+        // ---------- handle consumption update + bill recalc (single row) ----------
+        function attachTableListeners() {
+            // using event delegation (global click) for update & status
+            document.body.addEventListener('click', function(e) {
+                const target = e.target.closest('.update-bill-btn');
+                if (!target) return;
+                const row = target.closest('.table-row');
+                if (!row) return;
+                const utility = row.dataset.utility;
+                // role check: staff only if role matches utility OR admin
+                if (!(currentRole === utility || currentRole === 'admin')) {
+                    alert(`⛔ Access denied: you are ${currentRole}, cannot edit ${utility}`);
+                    return;
+                }
+                const consumerId = Number(row.dataset.consumerId);
+                const input = row.querySelector('.consumption-input');
+                const newConsumption = parseFloat(input.value);
+                if (isNaN(newConsumption) || newConsumption < 0) {
+                    alert('Please enter a valid consumption number');
+                    return;
+                }
+                // find record
+                const rec = utilityData[utility].find(r => r.id === consumerId);
+                if (rec) {
+                    rec.consumption = newConsumption;
+                    rec.bill = parseFloat((rec.consumption * rates[utility]).toFixed(2));
+                    renderUtility(utility);
+                }
+            });
+
+            // toggle bill status (pending <-> paid)
+            document.body.addEventListener('click', function(e) {
+                const btn = e.target.closest('.toggle-status-btn');
+                if (!btn) return;
+                const row = btn.closest('.table-row');
+                if (!row) return;
+                const utility = row.dataset.utility;
+                if (!(currentRole === utility || currentRole === 'admin')) {
+                    alert(`⛔ Cannot change status – role ${currentRole} not allowed`);
+                    return;
+                }
+                const consumerId = Number(row.dataset.consumerId);
+                const rec = utilityData[utility].find(r => r.id === consumerId);
+                if (rec) {
+                    rec.status = rec.status === 'pending' ? 'paid' : 'pending';
+                    renderUtility(utility);
+                }
+            });
+
+            // recalc all buttons (staff utility only or admin)
+            document.getElementById('electricityRecalcBtn')?.addEventListener('click', function() {
+                if (currentRole === 'electricity' || currentRole === 'admin') { recalcUtilityBills('electricity'); }
+                else alert('Only electricity staff or admin can recalc electricity');
+            });
+            document.getElementById('waterRecalcBtn')?.addEventListener('click', function() {
+                if (currentRole === 'water' || currentRole === 'admin') { recalcUtilityBills('water'); }
+                else alert('Only water staff or admin can recalc water');
+            });
+            document.getElementById('gasRecalcBtn')?.addEventListener('click', function() {
+                if (currentRole === 'gas' || currentRole === 'admin') { recalcUtilityBills('gas'); }
+                else alert('Only gas staff or admin can recalc gas');
+            });
+        }
+
+        // ---------- UI update based on current role ----------
+        function applyRole(role) {
+            currentRole = role;
+            // update badge label
+            if (role === null) {
+                activeRoleLabel.innerText = 'Not logged in';
+            } else if (role === 'admin') {
+                activeRoleLabel.innerText = 'Admin · full access';
+            } else {
+                activeRoleLabel.innerText = `${role.charAt(0).toUpperCase() + role.slice(1)} staff`;
+            }
+
+            // 1. show/hide admin summary block
+            if (role === 'admin') {
+                adminSummary.classList.remove('hidden');
+            } else {
+                adminSummary.classList.add('hidden');
+            }
+
+            // 2. handle tab enable / disable & visibility
+            // Admin: all tabs clickable, switch panels. Staff: only own utility tab active, others disabled.
+            tabs.forEach(tab => {
+                tab.classList.remove('disabled', 'active');
+                const tabUtil = tab.dataset.tab;
+                if (role === 'admin') {
+                    tab.classList.remove('disabled');
+                    tab.style.pointerEvents = 'auto';
+                    tab.style.opacity = '1';
+                } else if (role === tabUtil) {  
+                    // staff: own utility accessible
+                    tab.classList.remove('disabled');
+                    tab.style.pointerEvents = 'auto';
+                    tab.style.opacity = '1';
+                } else {
+                    // staff trying to see other utility -> disabled, cannot click
+                    tab.classList.add('disabled');
+                    tab.style.pointerEvents = 'none';
+                    tab.style.opacity = '0.5';
+                }
+            });
+
+            // 3. which panel is visible? 
+            // Admin: keep active whatever tab active (default electric) but we don't override active tab class.
+            // Staff: force active tab to their own utility, and only that panel visible.
+            if (role && role !== 'admin') {
+                // remove active class from all tabs, add active to role tab
+                tabs.forEach(t => t.classList.remove('active'));
+                const activeTab = document.querySelector(`.tab[data-tab="${role}"]`);
+                if (activeTab) activeTab.classList.add('active');
+                
+                // hide all panels, show only role panel
+                Object.keys(panels).forEach(key => {
+                    panels[key].classList.remove('active-panel');
+                });
+                if (panels[role]) panels[role].classList.add('active-panel');
+            } 
+            else if (role === 'admin') {
+                // keep current active tab, but ensure no disabled leftover pointer events etc. 
+                // if no active, set electricity as active.
+                const hasActive = Array.from(tabs).some(t => t.classList.contains('active'));
+                if (!hasActive) {
+                    document.querySelector('.tab[data-tab="electricity"]')?.classList.add('active');
+                }
+                // show all panels? No, we only show active tab panel via tab click. but we also must ensure that correct panel visible.
+                const activeTabUtil = document.querySelector('.tab.active')?.dataset.tab || 'electricity';
+                Object.keys(panels).forEach(key => {
+                    panels[key].classList.remove('active-panel');
+                });
+                if (panels[activeTabUtil]) panels[activeTabUtil].classList.add('active-panel');
+            }
+            else {
+                // no role: default show nothing? set electricity tab but panels all hidden? we show electric by default.
+                tabs.forEach(t => t.classList.remove('active', 'disabled'));
+                document.querySelector('.tab[data-tab="electricity"]')?.classList.add('active');
+                Object.keys(panels).forEach(key => panels[key].classList.remove('active-panel'));
+                panels.electricity.classList.add('active-panel');
+            }
+
+            // additional: hint update
+            if (role === 'admin') roleHint.innerHTML = '👑 Admin: full access – all utilities, summary, edit any.';
+            else if (role) roleHint.innerHTML = `🔒 ${role} staff: only manage ${role} data. other utilities disabled.`;
+            else roleHint.innerHTML = '⚡ Please log in as staff (electricity/water/gas) or admin.';
+        }
+
+        // ---------- manual tab switching (only enabled if admin or matching staff) ----------
+        function initTabClick() {
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    const util = this.dataset.tab;
+                    if (currentRole === 'admin') {
+                        // admin can switch freely
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        Object.keys(panels).forEach(key => panels[key].classList.remove('active-panel'));
+                        panels[util].classList.add('active-panel');
+                    } else if (currentRole === util) {
+                        // staff: allowed to click own utility tab (already active normally)
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        Object.keys(panels).forEach(key => panels[key].classList.remove('active-panel'));
+                        panels[util].classList.add('active-panel');
+                    }
+                    // else disabled via pointer-events, but double-check
+                });
+            });
+        }
+
+        // ---------- bootstrap: load data, attach listeners, default role---------
+        function init() {
+            // initial render all tables
+            renderUtility('electricity');
+            renderUtility('water');
+            renderUtility('gas');
+            attachTableListeners();
+            initTabClick();
+
+            // default no role, but show electric tab. 
+            applyRole(null);  // not logged in
+
+            // role switching via header buttons
+            const roleButtons = document.querySelectorAll('.btn-login, .btn-outline');
+            roleButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const role = this.dataset.role; // electricity, water, gas, admin
+                    if (role) {
+                        applyRole(role);
+                    }
+                });
+            });
+        }
+
+        init();
+    })();
+</script>
+
+<!-- one page, all utilities, strict permission: staff only own utility, admin sees all -->
+</body>
+</html>

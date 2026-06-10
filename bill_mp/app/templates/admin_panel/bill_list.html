@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- ========== DESIGN ADDED WITHOUT CHANGING ANY ORIGINAL CODE ========== -->
+    <!-- pure CSS layer – leaves all tags, attributes, template syntax untouched -->
+    <style>
+        /* minimal base reset – only affects beauty, not structure */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f1f5f9 0%, #e6ecf4 100%);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* elegant container – wraps the untouched content */
+        .design-shell {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(4px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -15px #1a2e4a33, 0 2px 8px rgba(0,0,0,0.02);
+            padding: 2rem 2rem 2.5rem 2rem;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        /* <h2> styling – untouched text, only visual surroundings */
+        h2 {
+            font-size: 2.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0b2b4a 0%, #1b4a6f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            padding-left: 0.75rem;
+            border-left: 7px solid #3c7bb0;
+            display: inline-block;
+        }
+
+        /* subtle description – added via pseudo so no extra element */
+        h2::after {
+            content: '⸻ overview';
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4f6f8f;
+            background: #eef3f9;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 1.2rem;
+            letter-spacing: 0.3px;
+            -webkit-text-fill-color: #2b4b6e;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* ===== TABLE DESIGN – only visual, no change to structure ===== */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
+        /* thead – soft but distinct */
+        thead tr {
+            background: transparent;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.9rem 1.2rem;
+            font-weight: 600;
+            color: #1e3d5e;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.8px;
+            background: #dce9fa7f;
+            border-radius: 18px 18px 8px 8px;
+            backdrop-filter: blur(3px);
+        }
+
+        /* rows – modern card style, respecting original content */
+        tbody tr {
+            background: #ffffffd9;
+            backdrop-filter: blur(2px);
+            border-radius: 24px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px -4px rgba(0, 30, 60, 0.08);
+        }
+
+        tbody tr:hover {
+            background: #ffffff;
+            box-shadow: 0 12px 22px -12px #1f3f60a0;
+            transform: scale(1.002);
+        }
+
+        td {
+            padding: 1.2rem 1.2rem;
+            border: none;
+            color: #142f44;
+            font-size: 0.98rem;
+            background: inherit;
+        }
+
+        /* first cell – subtle id style */
+        td:first-child {
+            font-family: 'JetBrains Mono', 'SF Mono', monospace;
+            font-weight: 520;
+            color: #134980;
+            border-top-left-radius: 24px;
+            border-bottom-left-radius: 24px;
+        }
+
+        /* last cell – rounded right edge */
+        td:last-child {
+            border-top-right-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
+
+        /* Customer name – soft emphasis */
+        td:nth-child(2) {
+            font-weight: 520;
+            color: #1f4970;
+        }
+
+        /* Amount – subtle currency style */
+        td:nth-child(3) {
+            font-weight: 570;
+            color: #0e3d5c;
+            letter-spacing: 0.2px;
+        }
+
+        /* ===== STATUS BADGE – pure design, logic untouched ===== */
+        td:nth-child(4) {
+            /* we keep original text, add background via pseudo + gradient */
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e3a5f; /* fallback */
+            -webkit-text-fill-color: #1d3a5a; 
+            background: transparent; 
+            padding-left: 2.2rem; /* make room for decorative dot */
+        }
+
+        /* common pseudo dot for both statuses – adds soft indicator */
+        td:nth-child(4)::before {
+            content: '';
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 30px;
+            background: #4280b0; /* default blue */
+            box-shadow: 0 0 0 3px #c1daf5;
+            transition: 0.1s;
+        }
+
+        /* we cannot change content, but we can add distinct background based on text?
+           but that would require :contains, which doesn't exist. 
+           however we can cheat a tiny bit with attr? no.
+           but we want "Paid" to have greenish vibe, "Unpaid" subtle orange.
+           since we cannot modify tags, we use two custom properties? impossible without JS.
+           BUT we can rely on the fact that the text itself is either "Paid" or "Unpaid".
+           We will apply a gradient background that matches the meaning via text contrast.
+           both look fine, but we add a second pseudo element that uses the text?
+           impossible. So we accept the dot stays unified blue.
+           but that's okay – it's just a design accent.
+           i'll make it slightly adapt using a advanced technique: we detect via sibling?
+           no. 
+           to honor the constraint perfectly, we leave dot as elegant neutral.
+        */
+
+        /* but we can give subtle background hue to the whole cell – we use background blend? 
+           we'll set a light gradient that is universal. */
+        td:nth-child(4) {
+            background: linear-gradient(110deg, #e4effb, #dbeafe);
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem 0.4rem 2.6rem;
+            width: fit-content;
+            min-width: 100px;
+            font-weight: 600;
+            color: #163753;
+            border: 1px solid #c2daf5;
+            box-shadow: inset 0 1px 3px #ffffff, 0 3px 6px #bbcbe030;
+        }
+
+        /* ===== VIEW BUTTON – no changes to link, just styling ===== */
+        td a {
+            display: inline-block;
+            background: #1f4f7a;
+            color: white !important;
+            text-decoration: none;
+            font-weight: 550;
+            font-size: 0.85rem;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            transition: 0.15s;
+            box-shadow: 0 6px 12px -6px #143653, 0 0 0 1px #38668b inset;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        td a:hover {
+            background: #143e60;
+            box-shadow: 0 10px 18px -8px #0b2e46;
+            transform: translateY(-2px);
+        }
+
+        td a:active {
+            transform: scale(0.96);
+            background: #0c3452;
+        }
+
+        /* ===== ensure original spacing ===== */
+        tbody tr td:first-child {
+            padding-left: 1.8rem;
+        }
+        tbody tr td:last-child {
+            padding-right: 1.8rem;
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .design-shell { padding: 1.5rem 1rem; }
+            td, th { padding: 0.8rem 0.5rem; }
+            td:nth-child(4) { padding: 0.3rem 0.8rem 0.3rem 2rem; }
+        }
+
+        /* preserve original django template tags exactly – they are just text */
+        /* all original tags remain unmodified, we only float design around */
+    </style>
+</head>
+<body>
+    <!-- design shell wraps everything – does not alter any id/class on original elements -->
+    <div class="design-shell">
+        <!-- everything below is 100% untouched original code -->
+        <h2>All Bills</h2>
+            <p>Total Bills: {{ bills|length }}</p>
+            <!-- <p>User Role: {{ request.user.role }}</p> -->
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Bill ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.id }}</td>
+                    <td>{{ bill.customer.user.first_name }}</td>
+                    <td>₹ {{ bill.total_amount }}</td>
+                    <td>
+                        {% if bill.is_paid %}
+                            Paid
+                        {% else %}
+                            Unpaid
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- THIS IS THE CORRECT WAY -->
+                        <a href="{% url 'admin_bill_detail' bill.id %}">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- end of untouched original code -->
+    </div>
+    <!-- extra micro style for status background differentiation without touching markup 
+         we cannot detect text, but we can make paid/unpaid more legible via subtle gradient 
+         but we already have a unified style, which is clean. -->
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Consumer | Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="fas fa-user-edit"></i>
+                Edit Consumer Details
+            </h4>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="card-body row g-4">
+
+                <!-- Consumer ID -->
+                <div class="col-md-6">
+                    <label class="form-label">Consumer ID</label>
+                    <input class="form-control" value="{{ customer.customer_id }}" readonly>
+                </div>
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="first_name" class="form-control"
+                           value="{{ user_obj.first_name }}" required>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control"
+                           value="{{ user_obj.email }}" required>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control"
+                           value="{{ user_obj.phone }}">
+                </div>
+
+                <!-- Connection Type -->
+                <div class="col-md-6">
+                    <label class="form-label">Utility Service</label>
+                    <select name="connection_type" class="form-select" required>
+                        <option value="ELECTRICITY" {% if customer.connection_type == 'ELECTRICITY' %}selected{% endif %}>Electricity</option>
+                        <option value="WATER" {% if customer.connection_type == 'WATER' %}selected{% endif %}>Water</option>
+                        <option value="GAS" {% if customer.connection_type == 'GAS' %}selected{% endif %}>Gas</option>
+                    </select>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label">Account Status</label>
+                    <input class="form-control"
+                           value="{% if user_obj.is_active %}Active{% else %}Inactive{% endif %}"
+                           readonly>
+                </div>
+
+                <!-- Address -->
+                <div class="col-md-12">
+                    <label class="form-label">Address</label>
+                    <textarea name="address" rows="3" class="form-control" required>{{ customer.address }}</textarea>
+                </div>
+
+            </div>
+
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

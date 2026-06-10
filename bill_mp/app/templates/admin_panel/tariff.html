@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tariff & Billing · Config</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f0f5fe;
+            font-family: 'Inter', sans-serif;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            background: white;
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #cfe2ff;
+            padding-bottom: 10px;
+        }
+
+        .card {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg,#1f4d7a,#0d3252);
+            color: white;
+            font-weight: 600;
+            border-radius: 20px 20px 0 0;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+        }
+
+        .btn-primary {
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>⚙️ Tariff & Billing Configuration</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Tariff Setup -->
+        <div class="card mb-4">
+            <div class="card-header">Tariff Setup</div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Slab 1 Rate (₹ per unit)</label>
+                        <input type="number" step="0.01" name="slab_1_rate" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Slab 2 Rate (₹ per unit)</label>
+                        <input type="number" step="0.01" name="slab_2_rate" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Fixed Charges (₹)</label>
+                        <input type="number" step="0.01" name="fixed_charge" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Tax Percentage (%)</label>
+                        <input type="number" step="0.01" name="tax_percentage" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Late Payment Penalty (₹)</label>
+                    <input type="number" step="0.01" name="late_penalty" class="form-control">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Billing Rules -->
+        <div class="card mb-4">
+            <div class="card-header">Billing Rules</div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Billing Cycle</label>
+                        <select name="billing_cycle" class="form-control">
+                            <option value="Monthly">Monthly</option>
+                            <option value="Bi-Monthly">Bi-Monthly</option>
+                            <option value="Quarterly">Quarterly</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Due Date (Days After Generation)</label>
+                        <input type="number" name="due_days" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Enable Auto Bill Generation</label>
+                    <select name="auto_generate" class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Penalty Applied After (Days)</label>
+                    <input type="number" name="penalty_after_days" class="form-control">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">
+                Save Configuration
+            </button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

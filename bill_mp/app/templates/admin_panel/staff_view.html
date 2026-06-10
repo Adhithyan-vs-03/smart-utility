@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Details | Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container-wrapper {
+            padding: 60px 20px;
+        }
+
+        .staff-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.06);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        .badge-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .approved {
+            background: #16a34a;
+        }
+
+        .pending {
+            background: #f59e0b;
+        }
+
+        .active {
+            background: #2563eb;
+        }
+
+        .inactive {
+            background: #dc2626;
+        }
+
+        .btn-custom {
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .btn-back {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container container-wrapper">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="staff-card">
+
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <div class="profile-avatar">
+                        {% if staff.user.first_name %}
+                            {{ staff.user.first_name|first|upper }}
+                        {% else %}
+                            {{ staff.user.username|first|upper }}
+                        {% endif %}
+                    </div>
+
+                    <h3>{{ staff.user.get_full_name|default:staff.user.username }}</h3>
+                    <p class="text-muted">{{ staff.user.email }}</p>
+                </div>
+
+                <!-- Details -->
+                <div class="detail-item">
+                    <span class="detail-label">Username</span>
+                    <span>{{ staff.user.username }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Utility Department</span>
+                    <span class="badge bg-info">
+                        <i class="fas fa-bolt me-1"></i>
+                        {{ staff.get_utility_type_display }}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Approval Status</span>
+                    {% if staff.is_approved %}
+                        <span class="badge-status approved">
+                            <i class="fas fa-check-circle"></i> Approved
+                        </span>
+                    {% else %}
+                        <span class="badge-status pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Account Status</span>
+                    {% if staff.is_active %}
+                        <span class="badge-status active">
+                            <i class="fas fa-user-check"></i> Active
+                        </span>
+                    {% else %}
+                        <span class="badge-status inactive">
+                            <i class="fas fa-user-slash"></i> Inactive
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="text-center mt-4">
+                    <a href="{% url 'admin_user_management' %}" class="btn btn-custom btn-back">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Staff List
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

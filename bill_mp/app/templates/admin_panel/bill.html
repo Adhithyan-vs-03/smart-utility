@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin | Bill Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 30px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .page-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .page-header h2 i {
+            color: #4361ee;
+            background: rgba(67, 97, 238, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 24px;
+        }
+
+        .bill-badge {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 14px;
+            font-weight: 500;
+            color: #4361ee;
+        }
+
+        .bill-badge i {
+            margin-right: 8px;
+            color: #28a745;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .card-header i {
+            font-size: 22px;
+            color: #4361ee;
+            background: rgba(67, 97, 238, 0.1);
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .card-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-row.full-width {
+            grid-column: span 2;
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .value i {
+            font-size: 14px;
+            color: #4361ee;
+            width: 20px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge i {
+            font-size: 12px;
+        }
+
+        .paid { 
+            background: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb;
+        }
+        .unpaid { 
+            background: #fff3cd; 
+            color: #856404; 
+            border: 1px solid #ffeeba;
+        }
+        .overdue { 
+            background: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 14px;
+            border: 1px solid #e9ecef;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            font-weight: 600;
+            padding: 15px 12px;
+            text-align: center;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #e9ecef;
+            text-align: center;
+            color: #334155;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .transaction-id {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #4361ee;
+            background: rgba(67, 97, 238, 0.08);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .payment-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .payment-status.success { background: #d4edda; color: #155724; }
+        .payment-status.pending { background: #fff3cd; color: #856404; }
+        .payment-status.failed { background: #f8d7da; color: #721c24; }
+
+        .no-payments {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f8fafc;
+            border-radius: 14px;
+            color: #64748b;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .no-payments i {
+            font-size: 48px;
+            color: #cbd5e1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-back {
+            background: white;
+            color: #4361ee;
+            border: 2px solid #e0e7ff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .btn-back:hover {
+            background: #f5f9ff;
+            border-color: #4361ee;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .info-row.full-width {
+                grid-column: span 1;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-header h2 {
+                font-size: 24px;
+            }
+
+            .bill-badge {
+                width: 100%;
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            th, td {
+                padding: 12px 8px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .card-header i {
+                margin: 0 auto;
+            }
+
+            .status-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .value {
+                font-size: 14px;
+            }
+
+            .badge {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .btn, .action-buttons, .page-header .bill-badge {
+                display: none;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+
+            th {
+                background: #f0f0f0;
+                color: black;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-file-invoice"></i>
+                Bill Details
+            </h2>
+            <div class="bill-badge">
+                <i class="fas fa-receipt"></i>
+                Bill #{{ bill.id }}
+            </div>
+        </div>
+
+        <!-- Customer Info Card -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-circle"></i>
+                <h3>Consumer Information</h3>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-id-card"></i>
+                        Customer ID
+                    </span>
+                    <span class="value">{{ bill.customer.customer_id }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-user"></i>
+                        Name
+                    </span>
+                    <span class="value">{{ bill.customer.user.first_name }} {{ bill.customer.user.last_name }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </span>
+                    <span class="value">{{ bill.customer.user.email }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-phone"></i>
+                        Phone
+                    </span>
+                    <span class="value">{{ bill.customer.user.phone }}</span>
+                </div>
+
+                <div class="info-row full-width">
+                    <span class="label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Address
+                    </span>
+                    <span class="value">{{ bill.customer.address }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill Info Card -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Bill Information</h3>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-bolt"></i>
+                        Utility Type
+                    </span>
+                    <span class="value">
+                        {% if bill.connection_type == 'ELECTRICITY' %}
+                            <i class="fas fa-bolt" style="color: #f39c12;"></i>
+                        {% elif bill.connection_type == 'WATER' %}
+                            <i class="fas fa-water" style="color: #3498db;"></i>
+                        {% elif bill.connection_type == 'GAS' %}
+                            <i class="fas fa-fire" style="color: #e74c3c;"></i>
+                        {% endif %}
+                        {{ bill.connection_type }}
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-calendar-alt"></i>
+                        Month
+                    </span>
+                    <span class="value">{{ bill.month }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Units Consumed
+                    </span>
+                    <span class="value">{{ bill.units_consumed }} 
+                        {% if bill.connection_type == 'ELECTRICITY' %}kWh
+                        {% elif bill.connection_type == 'WATER' %}KL
+                        {% else %}m³{% endif %}
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-tag"></i>
+                        Rate Per Unit
+                    </span>
+                    <span class="value">₹ {{ bill.rate_per_unit }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-calculator"></i>
+                        Subtotal
+                    </span>
+                    <span class="value">₹ {{ bill.units_consumed|floatformat:2 }} × {{ bill.rate_per_unit|floatformat:2 }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-coins"></i>
+                        Total Amount
+                    </span>
+                    <span class="value" style="font-size: 18px; font-weight: 700; color: #4361ee;">₹ {{ bill.total_amount }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-calendar-check"></i>
+                        Due Date
+                    </span>
+                    <span class="value">{{ bill.due_date }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">
+                        <i class="fas fa-user-tie"></i>
+                        Generated By
+                    </span>
+                    <span class="value">
+                        {% if bill.generated_by %}
+                            <i class="fas fa-user-check" style="color: #28a745;"></i>
+                            {{ bill.generated_by.user.first_name }}
+                        {% else %}
+                            <i class="fas fa-robot" style="color: #6c757d;"></i>
+                            System
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="info-row full-width">
+                    <span class="label">
+                        <i class="fas fa-info-circle"></i>
+                        Status
+                    </span>
+                    <div class="status-wrapper">
+                        {% if bill.is_paid %}
+                            <span class="badge paid">
+                                <i class="fas fa-check-circle"></i>
+                                Paid
+                            </span>
+                        {% elif bill.due_date < today %}
+                            <span class="badge overdue">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Overdue
+                            </span>
+                        {% else %}
+                            <span class="badge unpaid">
+                                <i class="fas fa-clock"></i>
+                                Unpaid
+                            </span>
+                        {% endif %}
+                        
+                        {% if bill.due_date < today and not bill.is_paid %}
+                            <span style="color: #dc3545; font-size: 13px;">
+                                <i class="fas fa-hourglass-end"></i>
+                                Due date passed
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment History Card -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-credit-card"></i>
+                <h3>Payment History</h3>
+                {% if bill.payments.all %}
+                    <span class="bill-badge" style="margin-left: auto;">
+                        <i class="fas fa-list"></i>
+                        {{ bill.payments.all|length }} Payment(s)
+                    </span>
+                {% endif %}
+            </div>
+
+            {% if bill.payments.all %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in bill.payments.all %}
+                            <tr>
+                                <td>
+                                    <span class="transaction-id">
+                                        <i class="fas fa-hashtag" style="font-size: 10px;"></i>
+                                        {{ payment.transaction_id|default:'N/A' }}
+                                    </span>
+                                </td>
+                                <td><strong>₹ {{ payment.amount }}</strong></td>
+                                <td>
+                                    <span class="payment-status 
+                                        {% if payment.status == 'SUCCESS' %}success
+                                        {% elif payment.status == 'PENDING' %}pending
+                                        {% elif payment.status == 'FAILED' %}failed
+                                        {% endif %}">
+                                        {% if payment.status == 'SUCCESS' %}
+                                            <i class="fas fa-check-circle"></i>
+                                        {% elif payment.status == 'PENDING' %}
+                                            <i class="fas fa-clock"></i>
+                                        {% elif payment.status == 'FAILED' %}
+                                            <i class="fas fa-times-circle"></i>
+                                        {% endif %}
+                                        {{ payment.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-alt" style="color: #6c757d; font-size: 12px; margin-right: 5px;"></i>
+                                    {{ payment.created_at|date:"d M Y, h:i A" }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="no-payments">
+                    <i class="fas fa-credit-card"></i>
+                    <p>No payments recorded for this bill yet.</p>
+                    {% if not bill.is_paid %}
+                        <span style="font-size: 13px; color: #4361ee;">
+                            <i class="fas fa-info-circle"></i>
+                            Payment pending
+                        </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            {% if not bill.is_paid %}
+            <button class="btn btn-primary" onclick="markAsPaid({{ bill.id }})">
+                <i class="fas fa-check-circle"></i>
+                Mark as Paid
+            </button>
+            {% endif %}
+            <a href="{% url 'admin_bill_list' %}">
+                <button class="btn btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Bills
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function markAsPaid(billId) {
+            if(confirm('Mark this bill as paid?')) {
+                // Add your AJAX call here
+                fetch(`/api/bill/${billId}/paid/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error marking bill as paid');
+                    }
+                });
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgot Password</title>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --success:#22c55e;
+    --danger:#ef4444;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:system-ui,-apple-system,sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    background: linear-gradient(135deg, #020617, #1e3a8a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+.card{
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(14px);
+    border-radius:18px;
+    padding:24px;
+    color:#f8fafc;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:6px;
+    font-size:1.6rem;
+}
+
+p{
+    text-align:center;
+    font-size:.9rem;
+    opacity:.8;
+    margin-bottom:18px;
+}
+
+.alert{
+    padding:10px;
+    border-radius:10px;
+    font-size:.9rem;
+    margin-bottom:12px;
+}
+
+.alert.error{background:#7f1d1d;}
+.alert.success{background:#14532d;}
+
+input{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    font-size:1rem;
+    margin-bottom:14px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--success),#16a34a);
+    color:#fff;
+    font-size:1rem;
+    font-weight:600;
+}
+
+a{
+    display:block;
+    margin-top:16px;
+    text-align:center;
+    color:#60a5fa;
+    font-size:.9rem;
+    text-decoration:none;
+}
+
+/* Tablet */
+@media(min-width:600px){
+    .card{padding:32px;}
+}
+
+/* Desktop */
+@media(min-width:900px){
+    h2{font-size:1.9rem;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Forgot Password</h2>
+    <p>Enter your registered email or phone</p>
+
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="identifier" placeholder="Email or Phone Number" required>
+        <button type="submit">Send OTP</button>
+    </form>
+
+    <a href="{% url 'customer_login' %}">Back to Login</a>
+</div>
+
+</body>
+</html>

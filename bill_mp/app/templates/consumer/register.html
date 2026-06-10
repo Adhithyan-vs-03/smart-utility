@@ -1,0 +1,614 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account | Smart Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top, #1e293b, #020617);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.alert {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.alert.error {
+    background: rgba(239, 68, 68, 0.18);
+    color: #fecaca;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.alert.success {
+    background: rgba(34, 197, 94, 0.18);
+    color: #bbf7d0;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+/* MAIN CARD */
+.signup-card {
+    width: 100%;
+    max-width: 900px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    box-shadow: 0 40px 90px rgba(0,0,0,0.7);
+}
+
+/* LEFT INFO */
+.info-panel {
+    padding: 60px;
+    background: linear-gradient(160deg, #09338d, #2f9fb1);
+    color: #020617;
+}
+
+.info-panel h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.info-panel p {
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(170, 213, 238, 0.8);
+    padding: 8px 18px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.list {
+    margin-top: 25px;
+}
+
+.list li {
+    list-style: none;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+/* RIGHT FORM */
+.form-panel {
+    padding: 55px;
+}
+
+.form-panel h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.form-group input::placeholder,
+.form-group select {
+    color: rgba(255,255,255,0.6);
+}
+
+.form-group select option {
+    background: #1e293b;
+    color: #fff;
+}
+
+/* BUTTON */
+.submit-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(135deg, #1987cf, #2563eb);
+    color: #020617;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    transform: scale(1.03);
+}
+
+/* FOOTER LINK */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+.role-card {
+        flex: 1;
+        background: linear-gradient(145deg, #1f2937, #111827);
+        border-radius: 16px;
+        padding: 20px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .role-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, var(--primary-color), transparent, var(--primary-color));
+        border-radius: 18px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .role-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .role-card:hover::before {
+        opacity: 0.5;
+    }
+    
+    .role-card.selected {
+        border-color: var(--primary-color);
+        background: linear-gradient(145deg, rgba(31, 41, 55, 0.8), #111827);
+        box-shadow: 0 0 30px var(--glow-color), 0 8px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .role-card.selected::before {
+        opacity: 1;
+        animation: borderGlow 2s linear infinite;
+    }
+    
+    .card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+    }
+    
+    .card-icon {
+        font-size: 32px;
+        background: linear-gradient(135deg, var(--primary-color), #6366f1);
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .selected .card-icon {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px var(--glow-color);
+    }
+    
+    .card-text {
+        flex: 1;
+    }
+    
+    .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f9fafb;
+        margin-bottom: 4px;
+        transition: color 0.3s ease;
+    }
+    
+    .selected .card-title {
+        color: var(--primary-color);
+        text-shadow: 0 0 10px var(--glow-color);
+    }
+    
+    .card-description {
+        font-size: 13px;
+        color: #9ca3af;
+        line-height: 1.4;
+    }
+    
+    .radio-indicator {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #4b5563;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .selected .radio-indicator {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+        box-shadow: 0 0 15px var(--glow-color);
+    }
+    
+    .indicator-circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: white;
+        transform: scale(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .selected .indicator-circle {
+        transform: scale(1);
+    }
+    
+    @keyframes borderGlow {
+        0%, 100% {
+            filter: hue-rotate(0deg);
+        }
+        50% {
+            filter: hue-rotate(30deg);
+        }
+    }
+    
+    /* Pulsing effect for selected card */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 30px var(--glow-color), 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 40px var(--glow-color), 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        100% {
+            box-shadow: 0 0 30px var(--glow-color), 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+    }
+    
+    .selected {
+        animation: pulse 3s infinite;
+    }
+
+/* Conditional fields */
+.conditional-field {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.conditional-field.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================= */
+/* RESPONSIVE DESIGN FIXED */
+/* ============================= */
+
+@media (max-width: 1024px) {
+    .signup-card {
+        max-width: 95%;
+    }
+
+    .info-panel {
+        padding: 40px;
+    }
+
+    .form-panel {
+        padding: 40px;
+    }
+}
+
+@media (max-width: 850px) {
+    body {
+        padding: 20px;
+        height: auto;
+    }
+
+    .signup-card {
+        grid-template-columns: 1fr;
+        border-radius: 20px;
+    }
+
+    .info-panel {
+        display: none;
+    }
+
+    .form-panel {
+        padding: 35px 25px;
+    }
+
+    .form-panel h2 {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .submit-btn {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    /* Stack role cards vertically */
+    .form-group > div {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .role-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-panel {
+        padding: 25px 18px;
+    }
+
+    .form-panel h2 {
+        font-size: 20px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-description {
+        font-size: 12px;
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    .radio-indicator {
+        width: 20px;
+        height: 20px;
+    }
+
+    .indicator-circle {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+</style>
+
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="signup-card">
+
+    <!-- LEFT INFO PANEL -->
+    <div class="info-panel">
+        <span class="badge">Smart Utility Platform</span>
+        <h1>One Account.<br>All Utility Bills.</h1>
+        <p>
+            Manage electricity, water, and gas bills securely
+            with real-time monitoring and smart alerts.
+        </p>
+
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="form-panel">
+        <h2>Create Account</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="phone" placeholder="Mobile Number" required>
+            </div>
+
+            <!-- CUSTOMER ID FIELD - SHOWN FOR CUSTOMERS -->
+            <div class="form-group conditional-field customer-field show" id="customerIdField">
+                <input type="text" name="customer_id" placeholder="Customer / Meter ID">
+            </div>
+
+            <!-- STAFF DEPARTMENT FIELD - SHOWN FOR STAFF -->
+            <div class="form-group conditional-field staff-field" id="departmentField">
+                <select name="department" id="departmentSelect">
+                    <option value="" disabled selected>Select Department</option>
+                    <option value="ELECTRICITY">Electricity</option>
+                    <option value="GAS">Gas</option>
+                    <option value="WATER">Water</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Create Password" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            
+            <div class="form-group">
+                <label style="font-size:14px; color:#e5e7eb; margin-bottom:12px; display:block; font-weight:500;">
+                    Select Account Type
+                </label>
+
+                <div style="display:flex; gap:20px; margin-top:6px;">
+                    <!-- Customer Box -->
+                    <label class="role-card selected" data-value="CUSTOMER" 
+                           style="--primary-color: #8b5cf6; --glow-color: rgba(139, 92, 246, 0.3);">
+                        <div class="card-content">
+                            <div class="card-icon">👤</div>
+                            <div class="card-text">
+                                <div class="card-title">Customer</div>
+                                <div class="card-description">For regular users</div>
+                            </div>
+                            <div class="radio-indicator">
+                                <div class="indicator-circle"></div>
+                            </div>
+                        </div>
+                        <input type="radio" name="role" value="CUSTOMER" checked style="display: none;">
+                    </label>
+
+                    <!-- Staff Box -->
+                    <label class="role-card" data-value="STAFF" 
+                           style="--primary-color: #10b981; --glow-color: rgba(16, 185, 129, 0.3);">
+                        <div class="card-content">
+                            <div class="card-icon">👨‍💼</div>
+                            <div class="card-text">
+                                <div class="card-title">Staff</div>
+                                <div class="card-description">For employees & administrators</div>
+                            </div>
+                            <div class="radio-indicator">
+                                <div class="indicator-circle"></div>
+                            </div>
+                        </div>
+                        <input type="radio" name="role" value="STAFF" style="display: none;">
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already registered?
+            <a href="{% url 'customer_login' %}">Login</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleCards = document.querySelectorAll('.role-card');
+        const customerField = document.getElementById('customerIdField');
+        const departmentField = document.getElementById('departmentField');
+        const departmentSelect = document.getElementById('departmentSelect');
+        const customerIdInput = document.querySelector('input[name="customer_id"]');
+        
+        // Function to toggle fields based on selected role
+        function toggleFields(selectedRole) {
+            if (selectedRole === 'CUSTOMER') {
+                // Show customer field, hide department field
+                customerField.classList.add('show');
+                customerIdInput.required = true;
+                
+                departmentField.classList.remove('show');
+                departmentSelect.required = false;
+                departmentSelect.value = '';
+            } else if (selectedRole === 'STAFF') {
+                // Show department field, hide customer field
+                departmentField.classList.add('show');
+                departmentSelect.required = true;
+                
+                customerField.classList.remove('show');
+                customerIdInput.required = false;
+                customerIdInput.value = '';
+            }
+        }
+        
+        // Add click event listeners to role cards
+        roleCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                
+                // Update all cards
+                roleCards.forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Select clicked card
+                this.classList.add('selected');
+                
+                // Update hidden radio inputs
+                document.querySelectorAll('input[name="role"]').forEach(input => {
+                    input.checked = input.value === value;
+                });
+                
+                // Toggle fields based on selected role
+                toggleFields(value);
+                
+                // Optional: Dispatch change event
+                const event = new Event('change', { bubbles: true });
+                document.querySelector(`input[name="role"][value="${value}"]`).dispatchEvent(event);
+            });
+        });
+        
+        // Initialize with customer fields shown (default selection)
+        toggleFields('CUSTOMER');
+    });
+</script>
+</body>
+</html>

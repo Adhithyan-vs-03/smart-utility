@@ -1,0 +1,657 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Dashboard | Smart Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --electricity: #f1c40f;
+            --water: #3498db;
+            --gas: #e74c3c;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand i {
+            color: var(--primary);
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #4361ee, #3a56d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* HEADER */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            color: #ffffff;
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-top: 0.5rem;
+        }
+
+        .stats-summary {
+            display: flex;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.25rem 1.75rem;
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        /* BILL GRID */
+        .bill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .bill-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: #cbd5e1;
+        }
+
+        .bill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .bill-card.electricity::before { background: linear-gradient(90deg, var(--electricity), #f39c12); }
+        .bill-card.water::before { background: linear-gradient(90deg, var(--water), #2980b9); }
+        .bill-card.gas::before { background: linear-gradient(90deg, var(--gas), #c0392b); }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .utility-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .utility-badge i {
+            font-size: 1rem;
+        }
+
+        .utility-badge.electricity { background: linear-gradient(135deg, var(--electricity), #f39c12); }
+        .utility-badge.water { background: linear-gradient(135deg, var(--water), #2980b9); }
+        .utility-badge.gas { background: linear-gradient(135deg, var(--gas), #c0392b); }
+
+        .status-badge {
+            padding: 0.4rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-badge.paid {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .status-badge.unpaid {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        .bill-body {
+            flex-grow: 1;
+            margin-bottom: 1.75rem;
+        }
+
+        .bill-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .info-value.amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .due-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.85rem;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--warning);
+        }
+
+        .due-date i {
+            color: var(--warning);
+            font-size: 1.1rem;
+        }
+
+        .due-date-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .due-date-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-left: auto;
+        }
+
+        .bill-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .bill-id {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .pay-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #ffffff;
+            padding: 0.85rem 1.75rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(67, 97, 238, 0.4);
+        }
+
+        .pay-btn:active {
+            transform: translateY(0);
+        }
+
+        .pay-btn.paid {
+            background: #e8f5e9;
+            color: var(--success);
+            box-shadow: none;
+            pointer-events: none;
+        }
+
+        .pay-btn.paid:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 400px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .bill-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-summary {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .bill-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 1.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-nav {
+                gap: 1rem;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .bill-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-summary {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .stat-item {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bill-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            animation-delay: calc(var(--i, 0) * 0.1s);
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fas fa-bolt"></i>
+        <h1>Smart Utility</h1>
+    </div>
+    
+    <div class="navbar-nav">
+        <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+        <a href="{% url 'customer_login' %}" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+    <header class="dashboard-header">
+        <div>
+            <h1 class="page-title">Utility Dashboard</h1>
+            <p class="page-subtitle">Manage your utility bills and payments in one place</p>
+        </div>
+        
+        <div class="stats-summary">
+            <div class="stat-item">
+                <span class="stat-value">{{ bills|length }}</span>
+                <span class="stat-label">Total Bills</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ unpaid_count|default:"0" }}</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">₹{{ total_amount|default:"0" }}</span>
+                <span class="stat-label">Total Due</span>
+            </div>
+        </div>
+    </header>
+
+    {% if bills %}
+    <div class="bill-grid">
+        {% for bill in bills %}
+        <div class="bill-card {{ bill.connection_type|lower }}" style="--i: {{ forloop.counter0 }}">
+            <div class="bill-header">
+                <div class="utility-badge {{ bill.connection_type|lower }}">
+                    <i class="fas fa-{% if bill.connection_type == 'Electricity' %}bolt{% elif bill.connection_type == 'Water' %}tint{% else %}fire{% endif %}"></i>
+                    {{ bill.connection_type }}
+                </div>
+                
+                <span class="status-badge {% if bill.is_paid %}paid{% else %}unpaid{% endif %}">
+                    <i class="fas fa-{% if bill.is_paid %}check-circle{% else %}clock{% endif %}"></i>
+                    {% if bill.is_paid %}Paid{% else %}Unpaid{% endif %}
+                </span>
+            </div>
+
+            <div class="bill-body">
+                <div class="bill-info">
+                    <div class="info-item">
+                        <span class="info-label">Billing Period</span>
+                        <span class="info-value">{{ bill.month }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Units Consumed</span>
+                        <span class="info-value">{{ bill.units_consumed }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Total Amount</span>
+                        <span class="info-value amount">₹{{ bill.total_amount }}</span>
+                    </div>
+                </div>
+
+                <div class="due-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="due-date-text">Due Date</span>
+                    <span class="due-date-value">{{ bill.due_date }}</span>
+                </div>
+            </div>
+
+            <div class="bill-footer">
+                <span class="bill-id">ID: #{{ forloop.counter|stringformat:"04d" }}{{ bill.id }}</span>
+                
+                {% if not bill.is_paid %}
+                <button 
+                        class="pay-btn"
+                        onclick="payBill('{{ bill.id }}', '{{ bill.total_amount }}')">
+                        <i class="fas fa-credit-card"></i>
+                                        Pay Now
+                </button>
+                {% else %}
+                <button class="pay-btn paid" disabled>
+                    <i class="fas fa-check-circle"></i>
+                    Paid
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <h3>No Bills Available</h3>
+        <p>You don't have any utility bills at the moment. All your bills will appear here when they are generated.</p>
+        <a href="#" class="pay-btn" style="margin-top: 1rem;">
+            <i class="fas fa-history"></i>
+            View Payment History
+        </a>
+    </div>
+    {% endif %}
+</main>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+function payBill(billId, amount) {
+
+    fetch(`/create-order/${billId}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        var options = {
+            "key": data.key,
+            "amount": data.amount,
+            "currency": "INR",
+            "name": "Smart Public Utility",
+            "description": "Utility Bill Payment",
+            "order_id": data.order_id,
+            "handler": function (response){
+
+                fetch("/verify-payment/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify(response)
+                })
+                .then(res => res.json())
+                .then(result => {
+                    alert(result.message);
+                    location.reload();
+                });
+            },
+            "theme": {
+                "color": "#2563eb"
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    });
+}
+</script>
+
+</body>
+</html>

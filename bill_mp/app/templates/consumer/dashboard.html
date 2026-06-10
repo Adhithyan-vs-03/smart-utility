@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Dashboard | Smart Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #5b21b6;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f1f5f9;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --gray-dark: #334155;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --sidebar-bg: rgba(15, 23, 42, 0.95);
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            --gradient-dark: linear-gradient(135deg, #0f172a, #1e293b);
+            --gradient-card: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(139, 92, 246, 0.05));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-dark);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex-grow: 1;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+            transition: var(--transition);
+            color: var(--gray-light);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu a:hover {
+            background: rgba(124, 58, 237, 0.1);
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .menu a.active {
+            background: rgba(124, 58, 237, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        .menu a.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .menu a i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .profile {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+        }
+
+        .profile-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            font-size: 13px;
+            color: var(--gray);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .topbar h2 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .welcome-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 18px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .welcome-text i {
+            color: var(--warning);
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--gradient-card);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: var(--gray-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .pay-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        th {
+            padding: 18px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        td {
+            padding: 18px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            color: var(--gray-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .paid {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Notifications */
+        .notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid;
+            transition: var(--transition);
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .notification-item:nth-child(1) {
+            border-left-color: var(--primary);
+        }
+
+        .notification-item:nth-child(2) {
+            border-left-color: var(--warning);
+        }
+
+        .notification-item:nth-child(3) {
+            border-left-color: var(--success);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .notification-item:nth-child(1) .notification-icon {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--primary);
+        }
+
+        .notification-item:nth-child(2) .notification-icon {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .notification-item:nth-child(3) .notification-icon {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .notification-content p {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+                flex-direction: row;
+                align-items: center;
+                gap: 30px;
+            }
+            
+            .logo {
+                margin-bottom: 0;
+            }
+            
+            .menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                flex-grow: 1;
+            }
+            
+            .menu a {
+                margin-bottom: 0;
+                padding: 12px 16px;
+            }
+            
+            .profile {
+                margin-top: 0;
+                padding-top: 0;
+                border-top: none;
+                border-left: 1px solid rgba(255, 255, 255, 0.08);
+                padding-left: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                padding: 20px;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .sidebar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .profile {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                padding-left: 0;
+                padding-top: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            Smart Utility
+        </div>
+
+        <nav class="menu">
+            <a class="active"><i class="fas fa-chart-pie"></i> Dashboard</a>
+            <a href="{% url 'bills' %}"><i class="fas fa-file-invoice"></i> Bills</a>
+            <a href="{% url 'usage_tracking' %}"><i class="fas fa-chart-line"></i> Usage</a>
+            <a href="{% url 'payment_history' %}"><i class="fas fa-credit-card"></i> Payment History</a>
+            <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> Notifications</a>
+        </nav>
+
+        <div class="profile">
+            <div class="profile-avatar">
+                {{ request.user.first_name|slice:":1" }}
+            </div>
+            <div class="profile-info">
+                <h4>{{ request.user.first_name }}</h4>
+                <p>{{ customer.customer_id }}</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="topbar">
+            <h2><i class="fas fa-chart-line"></i> Customer Dashboard</h2>
+            <div class="welcome-text">
+                Welcome back 👋
+            </div>
+        </div>
+
+        <!-- SUMMARY CARD -->
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="card-title">Total Due</div>
+                <div class="card-value">₹ {{ total_due }}</div>
+            </div>
+        </div>
+
+        <!-- CURRENT BILLS -->
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Current Bills
+                </h3>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utility</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for bill in unpaid_bills %}
+                    <tr>
+                        <td>{{ bill.utility_type }}</td>
+                        <td>{{ bill.billing_period }}</td>
+                        <td><strong>₹ {{ bill.total_amount }}</strong></td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td>
+                            <button class="action pay-btn"
+                                    onclick="payBill({{ bill.id }})">
+                                <i class="fas fa-credit-card"></i> Pay
+                            </button>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="fas fa-check-circle"></i>
+                                No pending bills 🎉
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<!-- RAZORPAY SCRIPT -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+function payBill(billId) {
+
+    fetch(`/create-order/${billId}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        var options = {
+            "key": data.key,
+            "amount": data.amount,
+            "currency": "INR",
+            "name": "Smart Utility",
+            "description": "Utility Bill Payment",
+            "order_id": data.order_id,
+
+            "handler": function (response) {
+
+                fetch("/verify-payment/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature
+                    })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    alert(result.message);
+                    location.reload();
+                });
+
+            },
+
+            "theme": {
+                "color": "#2563eb"
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+
+    })
+    .catch(error => {
+        alert("Something went wrong!");
+        console.log(error);
+    });
+
+}
+</script>
+
+</body>

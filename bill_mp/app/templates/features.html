@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Features | Smart Public Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4e7d1f7fbd.js" crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .section h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a237e;
+        }
+
+        .section p {
+            color: #555;
+            margin-bottom: 60px;
+            font-size: 17px;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-box {
+            background: #fff;
+            padding: 35px 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+        }
+
+        .feature-box:nth-child(2) .icon-wrapper {
+            background: linear-gradient(45deg, #ff6f00, #ffca28);
+        }
+
+        .feature-box:nth-child(3) .icon-wrapper {
+            background: linear-gradient(45deg, #8e24aa, #d81b60);
+        }
+
+        .feature-box:nth-child(4) .icon-wrapper {
+            background: linear-gradient(45deg, #43a047, #66bb6a);
+        }
+
+        .feature-box:nth-child(5) .icon-wrapper {
+            background: linear-gradient(45deg, #ef5350, #e53935);
+        }
+
+        .feature-box:nth-child(6) .icon-wrapper {
+            background: linear-gradient(45deg, #3949ab, #5c6bc0);
+        }
+
+        .feature-box h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #1a237e;
+        }
+
+        .feature-box p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .cta {
+            margin-top: 70px;
+        }
+
+        .cta a {
+            text-decoration: none;
+            padding: 14px 35px;
+            background: linear-gradient(45deg, #1a237e, #3949ab);
+            color: white;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .cta a:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+<section class="section">
+    <h1>Our Powerful Features</h1>
+    <p>Smart, secure, and efficient digital utility management platform.</p>
+
+    <div class="features-container">
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-user-shield"></i></div>
+            <h3>Admin Control</h3>
+            <p>Full system control with dashboard insights, user approvals, and analytics monitoring.</p>
+        </div>
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-file-invoice"></i></div>
+            <h3>Auto Billing</h3>
+            <p>Automatic bill generation based on meter readings with error-free calculations.</p>
+        </div>
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-users"></i></div>
+            <h3>Consumer Portal</h3>
+            <p>Consumers can view bills, download invoices, and track payment history easily.</p>
+        </div>
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-credit-card"></i></div>
+            <h3>Online Payments</h3>
+            <p>Secure Razorpay integration enabling quick and safe digital payments.</p>
+        </div>
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-chart-bar"></i></div>
+            <h3>Real-time Reports</h3>
+            <p>Track monthly revenue, unpaid bills, and overall system performance.</p>
+        </div>
+
+        <div class="feature-box">
+            <div class="icon-wrapper"><i class="fas fa-lock"></i></div>
+            <h3>Secure Login</h3>
+            <p>Role-based authentication ensuring data protection and privacy.</p>
+        </div>
+
+    </div>
+
+    
+</section>
+
+</body>
+</html>

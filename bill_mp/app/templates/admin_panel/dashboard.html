@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Smart Utility</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --info: #4895ef;
+            --warning: #f72585;
+            --danger: #f72585;
+            --dark: #0d1b2a;
+            --light: #f8f9fa;
+            --sidebar: #0d1b2a;
+            --sidebar-hover: #1b263b;
+            --card-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --card-gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --card-gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--sidebar);
+            min-height: 100vh;
+            color: #fff;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h4 {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #1b263b;
+            background: rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .sidebar h4 span {
+            color: #4cc9f0;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: block;
+            padding: 15px 25px;
+            margin: 5px 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a:hover {
+            background: var(--sidebar-hover);
+            color: #fff;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--info);
+        }
+
+        .sidebar a.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .sidebar a i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            padding: 30px;
+            background: transparent;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .dashboard-header h3 {
+            color: var(--dark);
+            font-weight: 700;
+            margin: 0;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .dashboard-header h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        .welcome-badge {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .stat-card {
+            border-radius: 15px;
+            border: none;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+            height: 100%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card-1 {
+            background: var(--card-gradient);
+        }
+
+        .stat-card-2 {
+            background: var(--card-gradient-2);
+        }
+
+        .stat-card-3 {
+            background: var(--card-gradient-3);
+        }
+
+        .stat-card-4 {
+            background: var(--card-gradient-4);
+        }
+
+        .stat-card-content {
+            padding: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-card h6 {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            font-size: 4rem;
+            opacity: 0.2;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.2);
+            opacity: 0.3;
+        }
+
+        .revenue-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid var(--primary);
+        }
+
+        .revenue-card h5 {
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .revenue-card h2 {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 2.8rem;
+        }
+
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(40%, -40%);
+            opacity: 0.1;
+        }
+
+        .card-box {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-box:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header-custom {
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px 25px;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .card-body-custom {
+            padding: 25px;
+        }
+
+        .table-custom {
+            margin-bottom: 0;
+        }
+
+        .table-custom thead th {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table-custom tbody td {
+            padding: 15px 20px;
+            border-color: #f1f1f1;
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .badge-custom {
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .badge-paid {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+        }
+
+        .badge-pending {
+            background: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+        }
+
+        .utility-type {
+            display: flex;
+            align-items: center;
+        }
+
+        .utility-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .utility-electricity {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .utility-water {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .utility-gas {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .row.g-4 > div {
+            animation: fadeIn 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .row.g-4 > div:nth-child(1) { animation-delay: 0.1s; }
+        .row.g-4 > div:nth-child(2) { animation-delay: 0.2s; }
+        .row.g-4 > div:nth-child(3) { animation-delay: 0.3s; }
+        .row.g-4 > div:nth-child(4) { animation-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                margin-bottom: 20px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .welcome-badge {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <div class="col-md-2 sidebar p-0">
+            <h4><span>Smart</span>Utility</h4>
+            <a href="#" class="active"><i class="fa fa-chart-line"></i> Dashboard</a>
+            <a href="{% url 'admin_user_management' %}"><i class="fa fa-users"></i> Users</a>
+            <a href="{% url 'admin_bill_list'  %}"><i class="fa fa-file-invoice-dollar"></i> Bills</a>
+            <a href="{% url 'tariff_billing_config'  %}"><i class="fa fa-cogs"></i> Tariff Settings</a>
+            <a href="{% url 'notifications_management'  %}"><i class="fa fa-bell"></i> Notifications</a>
+            <a href="{% url 'logout'  %}"><i class="fa fa-sign-out-alt"></i> Logout</a>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-md-10 main-content">
+
+            <!-- HEADER -->
+            <div class="dashboard-header fade-in">
+                <h3>Administrator Dashboard</h3>
+                <div class="welcome-badge slide-in">
+                    <i class="fas fa-user-shield me-2"></i> Welcome, Admin
+                </div>
+            </div>
+
+            <!-- STATS -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card stat-card-1">
+                        <div class="stat-card-content">
+                            <h6>Total Consumers</h6>
+                            <h3>{{ total_consumers }}</h3>
+                            <i class="fa fa-users stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card stat-card-2">
+                        <div class="stat-card-content">
+                            <h6>Active Connections</h6>
+                            <h3>{{ total_connections }}</h3>
+                            <i class="fa fa-plug stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card stat-card-3">
+                        <div class="stat-card-content">
+                            <h6>Pending Bills</h6>
+                            <h3>{{ pending_bills }}</h3>
+                            <i class="fa fa-file-circle-exclamation stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card stat-card-4">
+                        <div class="stat-card-content">
+                            <h6>Total Revenue</h6>
+                            <h3>₹ {{ total_revenue }}</h3>
+                            <i class="fa fa-indian-rupee-sign stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MONTHLY REVENUE -->
+            <div class="revenue-card fade-in">
+                <h5>Current Month Revenue</h5>
+                <h2>₹ {{ monthly_revenue }}</h2>
+            </div>
+
+            <!-- RECENT BILLS -->
+            
+            <div class="card card-box mb-4 fade-in">
+                <div class="card-header-custom">
+                    <i class="fas fa-file-invoice-dollar me-2 text-primary"></i> Recent Bills
+                </div>
+                <div class="card-body-custom p-0">
+                    <div class="table-responsive">
+                        <table class="table table-custom table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Utility</th>
+                                    <th>Month</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bill in recent_bills %}  <!-- Changed from 'bills' to 'recent_bills' -->
+                                    <tr>
+                                        <td>{{ bill.customer.customer_id }}</td>
+                                        <td>{{ bill.connection_type }}</td>
+                                        <td>{{ bill.month }}</td>
+                                        <td>₹ {{ bill.total_amount }}</td>
+                                        <td>
+                                            {% if bill.is_paid %}
+                                                <span class="badge bg-success">Paid</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+                                        <p class="text-muted">No records found</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- UTILITY STATS -->
+            <div class="card card-box fade-in">
+                <div class="card-header-custom">
+                    <i class="fas fa-chart-pie me-2 text-primary"></i> Utility-wise Performance
+                </div>
+                <div class="card-body-custom p-0">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Utility Type</th>
+                                    <th>Total Bills</th>
+                                    <th>Unpaid Bills</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in utility_stats %}
+                                <tr>
+                                    <td>
+                                        <div class="utility-type">
+                                            {% if u.connection_type == "Electricity" %}
+                                            <div class="utility-icon utility-electricity">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                            {% elif u.connection_type == "Water" %}
+                                            <div class="utility-icon utility-water">
+                                                <i class="fas fa-tint"></i>
+                                            </div>
+                                            {% else %}
+                                            <div class="utility-icon utility-gas">
+                                                <i class="fas fa-fire"></i>
+                                            </div>
+                                            {% endif %}
+                                            {{ u.connection_type }}
+                                        </div>
+                                    </td>
+                                    <td><strong>{{ u.total }}</strong></td>
+                                    <td><strong class="text-danger">{{ u.unpaid }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Add active class to sidebar links on click
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+        
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Add animation to cards on hover
+        const cards = document.querySelectorAll('.stat-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
+</body>
+</html>
